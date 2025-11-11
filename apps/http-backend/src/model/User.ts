@@ -1,6 +1,5 @@
 import mongoose, { Schema, ObjectId } from "mongoose";
 import bcrypt from "bcrypt";
-import { NextFunction } from "express";
 
 
 const UserSchema = new Schema({

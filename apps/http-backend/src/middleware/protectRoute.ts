@@ -6,7 +6,12 @@ import userModel from "../model/User";
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
-export async function protectRoute(req: Request, res: Response, next: NextFunction) {
+// Extend Express's Request type to include "user"
+interface AuthReq extends Request {
+    user?: any;
+}
+
+export async function protectRoute(req: AuthReq, res: Response, next: NextFunction) {
     const token = req.cookies.jwt;
 
     if (!token) {
@@ -31,8 +36,8 @@ export async function protectRoute(req: Request, res: Response, next: NextFuncti
         })
     }
 
+    //make the interface that extends the "REquet"
     req.user = userPresent;
-
     next();
 }
 

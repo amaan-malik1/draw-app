@@ -4,9 +4,11 @@ import jwt from 'jsonwebtoken';
 import userModel from '../model/User';
 import dotenv from 'dotenv';
 
-// const JWT_SECRET = process.env.JWT_SECRET;
 dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
+
+console.log("request done on auth reg");
 
 // signup controller
 export async function signup(req: Request, res: Response) {
