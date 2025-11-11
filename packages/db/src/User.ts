@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 
 
 const UserSchema = new Schema({
-    firstName: { type: String, minLength: 3, required: true },
-    lastName: { type: String, minLength: 3, required: true },
-    email: { type: String, minLength: 3, required: true, unique: true },
-    password: { type: String, minLength: 8, required: true },
+    firstName: { type: String, minLength: 3, maxLength: 30, required: true },
+    lastName: { type: String, minLength: 3, maxLength: 30, required: true },
+    email: { type: String, minLength: 3, maxLength: 50, required: true, unique: true },
+    password: { type: String, minLength: 8, maxLength: 32, required: true },
 }, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {
