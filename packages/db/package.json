@@ -14,13 +14,12 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@repo/typescript-config":"workspace:*"
+    "@repo/typescript-config": "workspace:*"
   },
   "dependencies": {
-    "@types/mongoose": "^5.11.97",
     "@types/node": "^22.15.3",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
-    "mongoose": "^8.19.3"
+    "prisma": "^6.19.0"
   }
 }
