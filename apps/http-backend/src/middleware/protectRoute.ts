@@ -1,10 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import dotenv from "dotenv";
-import userModel from "../model/User";
+import { JWT_SECRET } from "@repo/backend-common/config";
+import { prismaClient } from "@repo/db/client";
 
-dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // Extend Express's Request type to include "user"
 interface AuthReq extends Request {
@@ -29,7 +27,7 @@ export async function protectRoute(req: AuthReq, res: Response, next: NextFuncti
         })
     }
 
-    const userPresent = await userModel.findById(decoded.userId).select("-password");
+    const userPresent = await prismaClient.findById(decoded.userId).select("-password");
     if (!userPresent) {
         return res.status(401).json({
             message: "Unauthorized - User not found!"

@@ -1,19 +1,17 @@
 import bcrypt from 'bcrypt';
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import userModel from '../model/User';
-import dotenv from 'dotenv';
+import { JWT_SECRET } from "@repo/backend-common/config";
+import { prismaClient } from "@repo/db/client"
 
-dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET;
+const prisma = new prismaClient();
 
 
-console.log("request done on auth reg");
 
 // signup controller
 export async function signup(req: Request, res: Response) {
     const { firstName, lastName, email, password } = req.body;
-    if (!process.env.JWT_SECRET) {
+    if (!JWT_SECRET) {
         throw new Error("JWT_SECRET is not defined in .env file");
     }
 
@@ -36,14 +34,14 @@ export async function signup(req: Request, res: Response) {
             return res.status(400).json({ message: "Invalid email format" });
         }
 
-        const userExisted = await userModel.findOne({ email });
+        const userExisted = await prisma.User.findOne({ email });
         if (userExisted) {
             return res.status(400).json({
                 message: "Email already existed, Please use a different email."
             });
         }
 
-        const newUser = await userModel.create({
+        const newUser = await prisma.User.create({
             firstName,
             lastName,
             email,
@@ -80,7 +78,7 @@ export async function login(req: Request, res: Response) {
             });
         }
 
-        const userExisted = await userModel.findOne({ email });
+        const userExisted = await prisma.User.findOne({ email });
         if (!userExisted) {
             return res.status(401).json({
                 message: "Invalid email or password!"
@@ -95,11 +93,11 @@ export async function login(req: Request, res: Response) {
         }
 
         console.log("userExisted", userExisted);
-        console.log("JWT: ", process.env.JWT_SECRET);
+        console.log("JWT: ", JWT_SECRET);
 
         //payload
         const payload = { userId: userExisted._id };
-        const token = jwt.sign(payload, process.env.JWT_SECRET as string);
+        const token = jwt.sign(payload, JWT_SECRET as string);
 
         res.cookie("jwt", token, {
             maxAge: 7 * 24 * 60 * 60 * 1000,
