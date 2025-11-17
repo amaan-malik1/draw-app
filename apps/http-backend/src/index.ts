@@ -1,7 +1,7 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.router';
-// import chatRouter from './routes/chat.router'
+import roomRouter from './routes/room.router'
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/v1/auth', authRouter);
-// app.post('/api/v1/chat', chatRouter);
+app.use('/api/v1/room', roomRouter);
 
 
 async function startServer() {
